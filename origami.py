@@ -145,6 +145,30 @@ class PaneCommand(sublime_plugin.WindowCommand):
 		self.create_pane(direction)
 		self.carry_file_to_pane(direction)
 
+	def sweep_file_to_pane(self, direction):
+		# if a pane does not exist it creates it, create pane with file
+		# if it does exist, cary file to pane
+		window = self.window
+
+		if window.num_groups() == 1 and len(window.views_in_group(0)) == 1:
+			# there's only 1 pane in 1 file so moving this would just close the
+			# empty one it left.  might as well do nothing
+			return
+
+		next_cell = self.adjacent_cell(direction)
+		if not next_cell:
+			self.create_pane_with_file(direction)
+		else:
+			self.carry_file_to_pane(direction)
+
+		for group_index in reversed(range(window.num_groups())):
+			if not window.views_in_group(group_index):
+				# need to destroy pane that's this group
+				# so make this group active
+				window.focus_group(group_index)
+				# destroy yo self
+				self.destroy_current_pane()
+
 	def zoom_pane(self, fraction):
 		if fraction == None:
 			fraction = .9
