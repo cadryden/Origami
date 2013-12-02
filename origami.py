@@ -166,7 +166,7 @@ class PaneCommand(sublime_plugin.WindowCommand):
 				# need to destroy pane that's this group
 				# so make this group active
 				window.focus_group(group_index)
-				# destroy yo self
+				# destroy yourself
 				self.destroy_current_pane()
 
 	def zoom_pane(self, fraction):
@@ -355,6 +355,10 @@ class CloneFileToPaneCommand(PaneCommand):
 class CreatePaneWithFileCommand(PaneCommand):
 	def run(self, direction):
 		self.create_pane_with_file(direction)
+
+class SweepFileToPaneCommand(PaneCommand):
+	def run(self, direction):
+		self.sweep_file_to_pane(direction)
 
 class ZoomPaneCommand(PaneCommand):
 	def run(self, fraction=None):
